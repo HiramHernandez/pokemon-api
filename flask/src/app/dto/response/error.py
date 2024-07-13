@@ -1,0 +1,2 @@
+class ErrorResponse:
+    error: str
