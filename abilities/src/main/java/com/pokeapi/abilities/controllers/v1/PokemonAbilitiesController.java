@@ -1,6 +1,7 @@
 package com.pokeapi.abilities.controllers.v1;
 
-import com.pokeapi.abilities.exceptions.PokeApiCallError;
+import com.pokeapi.abilities.exceptions.RateLimitException;
+import com.pokeapi.abilities.utility.RateLimitInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ public class PokemonAbilitiesController {
     @Autowired
     private PokeAbilityService pokeAbilityService;
 
+    @Autowired
+    private RateLimitInterceptor rateLimitInterceptor;
     private Logger logger = LoggerFactory.getLogger(PokemonAbilitiesController.class);
 
     @Operation(summary = "Retrieve tha abilities of a specific pokemon")
@@ -42,9 +45,11 @@ public class PokemonAbilitiesController {
     })
     @GetMapping("/")
     public ResponseEntity<?> abilitiesByPokemon(@RequestParam(required = true) String name) throws HttpException {
+
         Call<PokemonAbility> call = pokeAbilityService.getAbilities(name.toLowerCase());
 
         try{
+            rateLimitInterceptor.intercept("dummyClientId");
             Response<PokemonAbility> response = call.execute();
             HttpStatusCode httpStatusCode = HttpStatusCode.valueOf(response.code());
             if (httpStatusCode.is4xxClientError()){
@@ -53,7 +58,9 @@ public class PokemonAbilitiesController {
             }
             return ResponseEntity.ok(response.body());
 
-        }catch (HttpException | IOException e){
+        } catch (RateLimitException e) {
+            return ResponseEntity.status(400).body(new ErrorResponse("1 solicitud por segundo, espere.."));
+        } catch (HttpException | IOException e){
             logger.error(String.format("Ha ocurrio un error: %s", e.getMessage()));
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setError("Ocurrio un error con la solicitud por favor revise el log");
