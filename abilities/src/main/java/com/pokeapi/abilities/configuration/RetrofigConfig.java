@@ -1,7 +1,6 @@
 package com.pokeapi.abilities.configuration;
 
 import com.pokeapi.abilities.services.PokeAbilityService;
-import com.pokeapi.abilities.services.impl.PokeAbilityServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;

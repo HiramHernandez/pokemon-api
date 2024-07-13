@@ -1,23 +1,23 @@
 package com.pokeapi.abilities.controllers.v1;
 
-import com.pokeapi.abilities.services.PokeAbilityService;
-import com.pokeapi.abilities.dto.responses.PokemonAbility;
-import com.pokeapi.abilities.dto.responses.ErrorResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.pokeapi.abilities.services.impl.PokeAbilityServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import retrofit2.Call;
 import retrofit2.Response;
+
+import com.pokeapi.abilities.services.PokeAbilityService;
+import com.pokeapi.abilities.dto.responses.PokemonAbility;
+import com.pokeapi.abilities.dto.responses.ErrorResponse;
 
 import java.io.IOException;
 import java.util.List;
